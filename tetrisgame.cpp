@@ -57,15 +57,8 @@ public:
         else if (MoveType == 2) {
             for (int i = 0; i < 4; i++) {
                 int new_x = center.first + block[i].second * (-direction), new_y = center.second + block[i].first * direction;
-                if (direction == 1) {
-                    if (new_x <= 0 || new_x > 12 || new_y <= 0 || new_y > 21 || T[new_x][new_y] != 0) {
-                        out = true;
-                    }
-                }
-                else {
-                    if (new_x <= 0 || new_x > 12 || new_y <= 0 || new_y > 21 || T[new_x][new_y] != 0) {
-                        out = true;
-                    }
+                if (new_x <= 0 || new_x > 12 || new_y <= 0 || new_y > 21 || T[new_x][new_y] != 0) {
+                    out = true;
                 }
             }
         }
