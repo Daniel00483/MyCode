@@ -1,4 +1,4 @@
-﻿#include<iostream>
+#include<iostream>
 #include<conio.h>
 #include<stdio.h>
 #include<stdlib.h>
@@ -6,6 +6,11 @@
 #include<windows.h>
 using namespace std;
 int T[13][22], color[8] = { 0,6,5,3,14,4,1,9 },score;
+void setcolor(int color) {
+    HANDLE hConsole;
+    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, color);
+}
 class Tetris {
 public:
     int type;
@@ -34,11 +39,6 @@ public:
             center = { 6,1 }, block[0] = { -1,1 }, block[1] = { 0,1 }, block[2] = { 1,0 }, block[3] = { 1,1 };
             break;
         }
-    }
-    void setcolor(int color) {
-        HANDLE hConsole;
-        hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        SetConsoleTextAttribute(hConsole, color);
     }
     bool out_of_bound(int MoveType, int direction) {
         bool out = false;
@@ -127,7 +127,10 @@ public:
             cout << "\n";
         }
         setcolor(8);
-        cout << "  □□□□□□□□□□□□" << "\n";
+        cout << "  □□□□□□□□□□□□";
+        if (game_over) {
+            cout << "           Press Enter to leave...";
+        }
     }
     void putdown(int start_y) {
         for (int x = 1; x <= 12; x++) {
@@ -166,8 +169,30 @@ public:
         }
         show(true);
     }
-};
+};   
+void start_show() {
+    for (int i = 1; i <= 7; i++) {
+        cout << "\n";
+    }
+    setcolor(6);
+    cout << "                  玩法 :" << "\n"
+        << "                           左方向鍵: 左橫移         右方向鍵: 右橫移" << "\n"<<"\n"
+        << "                                  X: 逆時鐘旋轉            C: 順時鐘旋轉" << "\n"<<"\n"
+        << "                             空白鍵: 快速落下" << "\n";
+    for (int i = 0; i < 5; i++) {
+        cout << "\n";
+    }
+    setcolor(10);
+    cout << "                Press Enter to start...";
+}
 int main() {
+    start_show();
+    while (true) {
+        if (_kbhit()) {
+            int key = _getch();
+            if (key == 13)break;
+        }
+    }
     int fall_time = -150, move_time = -100;
     while (true) {
         srand(time(NULL));
@@ -178,6 +203,12 @@ int main() {
             Sleep(200);
             system("cls");
             tetris.gameover_show();
+            while (true) {
+                if (_kbhit()) {
+                    int key = _getch();
+                    if (key == 13)break;
+                }
+            }
             break;
         }
         tetris.update_on_T(1, typ);
